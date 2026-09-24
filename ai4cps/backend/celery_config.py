@@ -16,4 +16,4 @@ task_ignore_result = False
 task_always_eager = True
 task_eager_propagates = True
 
-imports = ("selfx.tasks.feature_tasks",)
+imports = ("ai4cps.tasks.feature_tasks",)

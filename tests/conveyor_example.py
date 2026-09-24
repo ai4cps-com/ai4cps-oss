@@ -1,8 +1,8 @@
 import ml4cps.vis
 from ml4cps.examples import conveyor_system_sfowl
 from dash import dcc
-from selfx.dash.dashboard import SelfXDash
-from selfx.backend.features import Feature
+from ai4cps.dash.dashboard import SelfXDash
+from ai4cps.backend.features import Feature
 
 class DiscrValTS(Feature):
     def perform(self, start, end):

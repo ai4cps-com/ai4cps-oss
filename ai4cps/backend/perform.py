@@ -4,8 +4,8 @@ from typing import Any, Sequence, OrderedDict
 import networkx as nx
 import numpy as np
 import pandas as pd
-from selfx.backend.features import get_analysis_intervals
-from selfx.backend import results
+from ai4cps.backend.features import get_analysis_intervals
+from ai4cps.backend import results
 
 
 def run_tasks(tasks: Sequence[str], celery_app: Any, interv: Sequence[Any]) -> None:

@@ -5,7 +5,7 @@
 
 from urllib.parse import unquote
 import datetime
-from selfx.backend.datetime_utils import str_to_datetime
+from ai4cps.backend.datetime_utils import str_to_datetime
 
 ROUTE_PREFIX = "/selfx/"
 

@@ -3,4 +3,5 @@
 ```bash
 pip install ai4cps
 ```
-The PyPI distribution is named `ai4cps`; Python imports remain `selfx`.
+Install `ai4cps` and import from `ai4cps`, for example `from ai4cps.dash.dashboard import SelfXDash`.
+The deprecated `selfx` distribution provides compatibility for legacy `selfx` imports.

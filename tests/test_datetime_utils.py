@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 import pytz
 
-from selfx.backend.datetime_utils import (
+from ai4cps.backend.datetime_utils import (
     ensure_utc_index,
     ensure_utc_series,
     interval_difference,

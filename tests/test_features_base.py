@@ -1,4 +1,4 @@
-from selfx.backend.features import AnalysisManager
+from ai4cps.backend.features import AnalysisManager
 
 manager = AnalysisManager("1h")
 missing = manager.get_non_analyzed_intervals("2023-08-14", "2023-08-15")

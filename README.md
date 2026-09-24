@@ -11,9 +11,9 @@
 <div align="center">
   <a href="https://www.ai4cps.com">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="selfx/dash/assets/Logo%20dark.svg">
-      <source media="(prefers-color-scheme: light)" srcset="selfx/dash/assets/Logo%20light.svg">
-      <img src="selfx/dash/assets/Logo%20light.svg" width="400px" alt="Maintained by AI4CPS">
+      <source media="(prefers-color-scheme: dark)" srcset="ai4cps/dash/assets/Logo%20dark.svg">
+      <source media="(prefers-color-scheme: light)" srcset="ai4cps/dash/assets/Logo%20light.svg">
+      <img src="ai4cps/dash/assets/Logo%20light.svg" width="400px" alt="Maintained by AI4CPS">
     </picture>
   </a>
 </div>
@@ -87,4 +87,5 @@ LLMs can be used to easily create features
 See [https://ai4cps.com](https://ai4cps.com) to get in touch.
 
 
-The PyPI distribution is named `ai4cps`; Python imports remain `selfx`.
+Install `ai4cps` and import from `ai4cps`, for example `from ai4cps.dash.dashboard import SelfXDash`.
+The deprecated `selfx` distribution provides compatibility for legacy `selfx` imports.

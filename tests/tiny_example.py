@@ -1,5 +1,5 @@
-from selfx.dash.dashboard import SelfXDash
-from selfx.backend.features import Feature
+from ai4cps.dash.dashboard import SelfXDash
+from ai4cps.backend.features import Feature
 
 class Feature1(Feature):
     def perform(self, start, end):

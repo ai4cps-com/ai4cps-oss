@@ -7,7 +7,7 @@ This module provides:
 - ``Feature``:
   Base Celery task for a single analysis feature. A feature computes a result
   for a given time interval, optionally generates an LLM summary, and stores the
-  result via ``selfx.backend.results``.
+  result via ``ai4cps.backend.results``.
 
 - ``AnalysisManager``:
   Helper for splitting time ranges into analysis intervals, discovering missing
@@ -20,7 +20,7 @@ This module provides:
 Design notes
 ------------
 - Results are persisted through ``store_result(...)``, ``get_result(...)``, and
-  ``get_results(...)`` from ``selfx.backend.results``.
+  ``get_results(...)`` from ``ai4cps.backend.results``.
 - The special interval ``None`` represents online/live analysis and is stored
   under the ``"Online"`` prefix.
 - ``Feature.run(...)`` is the Celery entrypoint and should not usually be
@@ -55,9 +55,9 @@ import pandas as pd
 import requests
 from celery import Task, Celery
 
-from selfx.backend import datetime_utils
-from selfx.backend import results
-from selfx.backend.utils import make_valid_filename
+from ai4cps.backend import datetime_utils
+from ai4cps.backend import results
+from ai4cps.backend.utils import make_valid_filename
 
 
 DEFAULT_LLM_URL = "http://127.0.0.1:11434/api/generate"

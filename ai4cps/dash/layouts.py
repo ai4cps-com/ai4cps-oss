@@ -4,7 +4,7 @@
 
 
 import base64
-from selfx.dash.routing_utils import construct_id, construct_url, ROUTE_PREFIX
+from ai4cps.dash.routing_utils import construct_id, construct_url, ROUTE_PREFIX
 from dash import dcc, html, State, Input, Output
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc

@@ -45,8 +45,8 @@ from typing import Any, Dict, Iterable, Optional
 
 import joblib
 
-from selfx.backend.utils import make_valid_filename
-from selfx.backend.datetime_utils import dt_to_str_till_sec
+from ai4cps.backend.utils import make_valid_filename
+from ai4cps.backend.datetime_utils import dt_to_str_till_sec
 
 
 DEFAULT_RESULTS_DIR = Path("Analysis")

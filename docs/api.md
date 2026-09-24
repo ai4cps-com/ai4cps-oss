@@ -2,26 +2,26 @@
 
 ## Backend
 
-::: selfx.backend
+::: ai4cps.backend
     options:
       show_root_heading: true
       show_source: true
 
-::: selfx.backend.features
-::: selfx.backend.results
-::: selfx.backend.perform
-::: selfx.backend.datetime_utils
-::: selfx.backend.utils
+::: ai4cps.backend.features
+::: ai4cps.backend.results
+::: ai4cps.backend.perform
+::: ai4cps.backend.datetime_utils
+::: ai4cps.backend.utils
 
 
 
 ## Dashboard
-::: selfx.dash
+::: ai4cps.dash
     options:
       show_root_heading: true   
       show_source: true
 
-::: selfx.dash.dashboard
-::: selfx.dash.layouts
-::: selfx.dash.colors
-::: selfx.dash.routing_utils
+::: ai4cps.dash.dashboard
+::: ai4cps.dash.layouts
+::: ai4cps.dash.colors
+::: ai4cps.dash.routing_utils

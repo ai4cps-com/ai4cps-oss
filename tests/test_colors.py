@@ -1,7 +1,7 @@
 # test_colors.py
 import pytest
 
-from selfx.dash.colors import (
+from ai4cps.dash.colors import (
     BLACK,
     NEGATIVE,
     POSITIVE,

@@ -5,7 +5,7 @@ import joblib
 import numpy as np
 import pytest
 
-from selfx.backend import results
+from ai4cps.backend import results
 
 
 def test_concurrent_saves_publish_complete_results(tmp_path, monkeypatch):

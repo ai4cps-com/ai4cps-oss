@@ -24,12 +24,12 @@ from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 from flask import Response, redirect, request, send_file
 
-from selfx.backend.features import AnalysisManager, Feature, get_analysis_intervals
-from selfx.backend.perform import perform_requested_features, get_requested_features
-from selfx.backend.results import delete_files, get_result, is_stored
-from selfx.dash import colors
-from selfx.dash.routing_utils import construct_id, parse_url, construct_url, get_today, ROUTE_PREFIX
-from selfx.dash.layouts import get_sidebar, get_topbar
+from ai4cps.backend.features import AnalysisManager, Feature, get_analysis_intervals
+from ai4cps.backend.perform import perform_requested_features, get_requested_features
+from ai4cps.backend.results import delete_files, get_result, is_stored
+from ai4cps.dash import colors
+from ai4cps.dash.routing_utils import construct_id, parse_url, construct_url, get_today, ROUTE_PREFIX
+from ai4cps.dash.layouts import get_sidebar, get_topbar
 
 
 
@@ -893,7 +893,7 @@ def get_modal(modal_id: str, title: str = "Notification", button: bool = True, b
 
 def create_celery_app() -> Celery:
     app = Celery("selfx")
-    app.config_from_object("selfx.backend.celery_config")
+    app.config_from_object("ai4cps.backend.celery_config")
     # app.autodiscover_tasks(["selfx.tasks"])
     return app
 
