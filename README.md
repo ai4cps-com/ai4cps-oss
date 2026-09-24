@@ -1,9 +1,9 @@
-# SelfX OSS
+# AI4CPS OSS
 
-[![GitHub](https://img.shields.io/github/license/ai4cps-com/selfx-oss.svg?color=dark-green)](https://github.com/ai4cps-com/selfx-oss/blob/main/LICENSE)
-[![PyPI](https://img.shields.io/pypi/v/selfx.svg)](https://pypi.org/project/selfx-oss/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/selfx.svg)](https://pypi.org/project/selfx/)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/y/ai4cps-com/selfx-oss.svg)](https://github.com/ai4cps-com/selfx/graphs/contributors)
+[![GitHub](https://img.shields.io/github/license/ai4cps-com/ai4cps-oss.svg?color=dark-green)](https://github.com/ai4cps-com/ai4cps-oss/blob/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/ai4cps.svg)](https://pypi.org/project/ai4cps/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ai4cps.svg)](https://pypi.org/project/ai4cps/)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/y/ai4cps-com/ai4cps-oss.svg)](https://github.com/ai4cps-com/ai4cps-oss/graphs/contributors)
 [![Sponsor](https://img.shields.io/badge/Sponsor-❤-ff69b4)](https://github.com/sponsors/ai4cps-com)
 
  *SelfX is a Python framework for building ML & AI apps in the domain of Cyber-Physical Systems (CPSs)*.
@@ -51,7 +51,7 @@ selfx = dashboard.SelfXDash(
 )
 ```
 
-### SelfX OSS & SelfX Enterprise
+### AI4CPS OSS & SelfX Enterprise
 
 | Category                      | Feature                          | SelfX OOS (Open Source) | SelfX Enterprise         |
 |-------------------------------|----------------------------------| ----------------------- | ------------------------ |
@@ -86,3 +86,5 @@ LLMs can be used to easily create features
 
 See [https://ai4cps.com](https://ai4cps.com) to get in touch.
 
+
+The PyPI distribution is named `ai4cps`; Python imports remain `selfx`.

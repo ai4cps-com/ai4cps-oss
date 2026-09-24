@@ -14,7 +14,7 @@ def read_req_file(req_type):
 
 
 setup(
-    name="selfx",
+    name="ai4cps",
     version=main_ns["__version__"],
     author="Nemanja Hranisavljevic",
     author_email="nemanja@ai4cps.com",
@@ -39,8 +39,8 @@ setup(
     url="https://selfx.ai4cps.com",
     project_urls={
         "Documentation": "https://selfx.ai4cps.com",
-        "Source": "https://github.com/ai4cps-com/selfx-oss",
-        "Issue Tracker": "https://github.com/ai4cps-com/selfx-oss/issues",
+        "Source": "https://github.com/ai4cps-com/ai4cps-oss",
+        "Issue Tracker": "https://github.com/ai4cps-com/ai4cps-oss/issues",
     },
     classifiers=[
         "Development Status :: 4 - Beta",

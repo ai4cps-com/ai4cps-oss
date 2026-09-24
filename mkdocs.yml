@@ -1,7 +1,7 @@
-site_name: selfx-oss
+site_name: ai4cps-oss
 site_url: https://selfx.ai4cps.com
-repo_url: https://github.com/ai4cps-com/selfx-oss
-repo_name: ai4cps-com/selfx-oss
+repo_url: https://github.com/ai4cps-com/ai4cps-oss
+repo_name: ai4cps-com/ai4cps-oss
 
 plugins:
   - search
