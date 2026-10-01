@@ -1,4 +1,4 @@
-from ai4cps.dash.dashboard import SelfXDash
+from ai4cps.dash.dashboard import Dash4CPS
 from ai4cps.backend.features import Feature
 
 class Feature1(Feature):
@@ -23,7 +23,7 @@ class Feature2(Feature):
     def icon(self):
         return 'bar_chart'
 
-app = SelfXDash()
+app = Dash4CPS()
 app.add_system('Tiny', features=[Feature1, Feature2])
 
 app.run(port=8050, host="127.0.0.1")

@@ -1,7 +1,7 @@
 import ml4cps.vis
 from ml4cps.examples import conveyor_system_sfowl
 from dash import dcc
-from ai4cps.dash.dashboard import SelfXDash
+from ai4cps.dash.dashboard import Dash4CPS
 from ai4cps.backend.features import Feature
 
 class DiscrValTS(Feature):
@@ -30,7 +30,7 @@ class ContValTS(Feature):
     def icon(self):
         return 'bar_chart'
 
-app = SelfXDash()
+app = Dash4CPS()
 app.add_system('System 1', features=[DiscrValTS, ContValTS])
 
 app.run(port=8050, host="127.0.0.1")
