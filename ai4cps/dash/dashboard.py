@@ -93,9 +93,9 @@ def _stylesheet_links(stylesheets: Sequence[str]) -> str:
     )
 
 
-class SelfXDash:
+class Dash4CPS:
     """
-    Main application wrapper for the SelfX Dash dashboard.
+    Main application wrapper for the Dash4CPS dashboard.
 
     Responsibilities
     ---------------
@@ -323,7 +323,7 @@ class SelfXDash:
             Output(construct_id("sidebar"), "children"),
             Output(construct_id("content"), "children"),
             Input(construct_id("url"), "pathname"),
-            prevent_initial_call=True,
+            prevent_initial_call=False,
         )
         def _render_page(pathname):
             logger.info("Requested path: ", pathname)
@@ -756,6 +756,10 @@ class SelfXDash:
 # -------------------------
 # UI helpers
 # -------------------------
+# Backward-compatible name for existing dashboard imports.
+SelfXDash = Dash4CPS
+
+
 def table(data: Any, use_columns: Optional[Sequence[str]] = None, **kwargs) -> dash_table.DataTable:
     """Simple read-only table helper that normalizes object columns to strings."""
     if "style_cell" not in kwargs:
