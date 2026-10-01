@@ -265,6 +265,82 @@ button:hover,
   outline: none;
 }
 
+/* Compact secondary actions, e.g. expand/collapse and downloads. */
+button.minor_button{
+  box-sizing: border-box;
+  min-height: 28px;
+  padding: 3px 10px;
+  justify-content: center;
+  align-self: center;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  background-color: #fff;
+  color: var(--text);
+  cursor: pointer;
+}
+button.minor_button:hover{
+  background-color: var(--hover);
+  color: #fff;
+}
+button.minor_button:focus-visible{
+  outline: 2px solid var(--topbar) !important;
+  outline-offset: 2px;
+}
+button.minor_button:disabled{
+  opacity: 0.5;
+  cursor: default;
+}
+
+a.download_link{
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  align-items: center;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+a.download_link:hover{
+  color: var(--hover);
+  text-decoration: underline;
+}
+a.download_link:focus-visible{
+  outline: 2px solid var(--topbar) !important;
+  outline-offset: 2px;
+}
+
+/* ========= Dash Tabs ========= */
+.tab-container .tab{
+  box-sizing: border-box;
+  min-height: 36px;
+  padding: 7px 16px !important;
+  font-size: 14px;
+  line-height: 20px;
+  background-color: #F9F9F9 !important;
+  color: var(--text) !important;
+  border-top: 2px solid transparent !important;
+}
+.tab-container .tab:hover{
+  background-color: var(--hover) !important;
+  color: #fff !important;
+}
+.tab-container .tab--selected{
+  background-color: #fff !important;
+  color: var(--text) !important;
+  border-top-color: var(--accent) !important;
+}
+.tab-container .tab:focus-visible{
+  outline: 2px solid var(--topbar) !important;
+  outline-offset: -3px;
+}
+
 /* ========= Content Controls ========= */
 .content_control,
 .content_control_wide{
