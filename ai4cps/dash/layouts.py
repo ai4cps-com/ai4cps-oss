@@ -116,7 +116,8 @@ def get_topbar(
     # topbar_elements_left.append(html.Label("User role:", className="dropdownLabel"))
 
     role_options = list(selfx.features.get(system, {}).keys()) or list(roles)
-    if len(role_options) > 1 or role_options != ["Default"]:
+    role_options = [option for option in role_options if option != "Background"]
+    if role_options and role_options != ["Default"]:
         dd_elements = []
         for el in role_options:
             dd_elements.append(dbc.DropdownMenuItem(el, href=construct_url(system, el, feature, start, end)))
