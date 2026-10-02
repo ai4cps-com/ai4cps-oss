@@ -81,7 +81,7 @@ def get_requested_features(self, feature, system, start, finish):
 
         for k, interv in intervals.items():
             for f in features_to_get:
-                res = results.get_result(f'{k}/{f}.joblib')
+                res = results.get_result(f'{k}/{system}#{f}.joblib')
                 if res is None or ('status' in res and res['status'] == 'failed'):
                     if k not in results_failed:
                         results_failed[k] = {}

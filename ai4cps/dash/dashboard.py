@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MIT
+﻿# SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Nemanja Hranisavljevic
 # Contact: nemanja@ai4cps.com
 
@@ -268,8 +268,11 @@ class Dash4CPS:
             if request.path.rstrip("/") == ROUTE_PREFIX.rstrip("/"):
                 system = self.plant_names[0]
                 user = self.users[0]
+                if user == "Background" or user not in self.features[system]:
+                    user = next(role for role, features in self.features[system].items()
+                                if role != "Background" and features)
                 feature = next(iter(self.features[system][user].keys()))
-                return redirect(construct_url(system=system, user=self.users[0], feature=feature, start=get_today(),
+                return redirect(construct_url(system=system, user=user, feature=feature, start=get_today(),
                                               end=get_today()), code=302)
 
         self._cleanup_online_folder()
@@ -392,34 +395,6 @@ class Dash4CPS:
                 content = feature_object.layout(role, res, start, end)
             else:
                 exist_features = self.exist_requested_features(feature, system, start, end)
-                style_data_conditional = []
-                for col in exist_features.columns:
-                    style_data_conditional += [
-                        {
-                            "if": {
-                                "filter_query": f"{{{col}}} = 1",
-                                "column_id": col
-                            },
-                            "backgroundColor": "lightgreen",
-                            "color": "black"
-                        },
-                        {
-                            "if": {
-                                "filter_query": f"{{{col}}} = 0",
-                                "column_id": col
-                            },
-                            "backgroundColor": "khaki",
-                            "color": "black"
-                        },
-                        {
-                            "if": {
-                                "filter_query": f"{{{col}}} != 1 && {{{col}}} != 0",
-                                "column_id": col
-                            },
-                            "backgroundColor": "lightcoral",
-                            "color": "black"
-                        }
-                    ]
                 if not max_intervals or max_intervals <= 0 or n_intervals < max_intervals:
                     if exist_features.all().all():
                         return html.Div(children=[html.Br(),
@@ -428,12 +403,19 @@ class Dash4CPS:
                     else:
                         print("**** Features not ready")
 
-                        features_status = editable_table(exist_features.reset_index(),
-                                                         style_data_conditional=style_data_conditional)
-                        return html.Div(children=[html.Br(), html.Br(), html.Br(), dcc.Loading(),
-                                                  f"Waiting for the analysis: "
-                                                  f"{n_intervals * self.content_not_ready_refresh_interval}s",
-                                                  html.Br(), features_status]), False, -1
+                        features_status = feature_progress_table(exist_features)
+                        return html.Div(
+                            [
+                                dcc.Loading(),
+                                html.Div(
+                                    f"Waiting for the analysis: "
+                                    f"{n_intervals * self.content_not_ready_refresh_interval}s",
+                                    className="feature_progress_status",
+                                ),
+                                features_status,
+                            ],
+                            className="feature_progress",
+                        ), False, -1
                 else:
                     try:
                         feature_object = self._feature_obj[system][feature]
@@ -442,9 +424,8 @@ class Dash4CPS:
 
                         if res is None or failed_res:
                             for failed_k, failed_v in failed_res.items():
-                                exist_features.loc[failed_k, list(failed_v.keys())] = -1
-                            features_status = editable_table(exist_features.reset_index(),
-                                                             style_data_conditional=style_data_conditional)
+                                exist_features.loc[failed_k, [f"{system}#{name}" for name in failed_v]] = -1
+                            features_status = feature_progress_table(exist_features)
                             return html.Div(children=[html.Br(),
                                                       f"Failed analysis: "
                                                       f"{n_intervals * self.content_not_ready_refresh_interval}s",
@@ -548,18 +529,14 @@ class Dash4CPS:
             return content, True, -1
 
     def exist_requested_features(self, feature, system, start, finish):
-        features_to_get = list(self._feature_obj[system][feature].required_features)
-        if features_to_get is None:
-            features_to_get = [feature]
-        else:
-            features_to_get.append(feature)
+        dependencies = self._feature_obj[system][feature].required_features or ()
+        features_to_get = [f"{system}#{name}" for name in dict.fromkeys([*dependencies, feature])]
 
         try:
             intervals = get_analysis_intervals(start, finish)
             results = pd.DataFrame(np.nan, index=intervals.keys(), columns=features_to_get)
 
             for k, interv in intervals.items():
-                features_to_get = [f"{system}#{f}" for f in features_to_get]
                 for f in features_to_get:
                     success_f = is_stored(k, f)
                     results.loc[k, f] = float(success_f)
@@ -778,6 +755,33 @@ def table(data: Any, use_columns: Optional[Sequence[str]] = None, **kwargs) -> d
         style_data={"whiteSpace": "normal", "height": "auto"},
         **kwargs,
     )
+
+
+def feature_progress_table(exist_features):
+    """Render feature status using the shared dashboard table theme."""
+    progress = exist_features.reset_index()
+    status_colors = {1: "var(--accent)", 0: "#fff3cd"}
+    features_status = html.Div(
+        html.Table([
+            html.Thead(html.Tr([
+                html.Th(str(column), scope="col") for column in progress.columns
+            ])),
+            html.Tbody([
+                html.Tr([
+                    html.Th(str(row[0]), scope="row"),
+                    *[html.Td(str(value), style={
+                        "backgroundColor": status_colors.get(value, "#f8d7da"),
+                        "color": "var(--text)",
+                    }) for value in row[1:]],
+                ]) for row in progress.itertuples(index=False, name=None)
+            ]),
+        ], id="feature-progress-table"),
+        className="selfx_table_card",
+        tabIndex=0,
+        role="region",
+        **{"aria-label": "Feature computation progress"},
+    )
+    return features_status
 
 
 def editable_table(

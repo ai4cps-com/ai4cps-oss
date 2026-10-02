@@ -70,9 +70,12 @@ A{
 }
 
 /* ========= Layout ========= */
-#nav_tools{ padding-top: 20px; }
+#nav-tools{ padding-top: 20px; }
 
 .sidebar_style{
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
   position: fixed;
   top: var(--h-topbar);
   left: 0;
@@ -81,6 +84,29 @@ A{
   padding: 0;
   background-color: var(--sidebar);
   border: 0;
+}
+.sidebar_style #nav-tools{
+  flex-shrink: 0;
+  width: 100%;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.sidebar_logos{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding: 24px 20px 20px;
+  flex-shrink: 0;
+}
+.sidebar_logo{
+  display: block;
+  width: 100%;
+  max-width: 160px;
+  max-height: 60px;
+  object-fit: contain;
 }
 .sidebar_style .dash-dropdown{
   width: 100%;
@@ -233,7 +259,8 @@ A{
 .sidebar_buttons_style.nav-link{
   border-radius: 0;
   font-weight: 500;
-  padding-left: 40px;
+  padding-left: 20px;
+  text-align: left;
 }
 .sidebar_buttons_style.nav-link.active{
   background-color: var(--accent);
@@ -671,7 +698,7 @@ div#system{
 .DateRangePicker{ border: none; }
 
 .DateRangePickerInput{
-  background-color: var(--topbar);
+  background-color: transparent;
 }
 .DateRangePickerInput__withBorder{
   border-radius: 0;
@@ -688,7 +715,7 @@ div#system{
 .DateInput{
   margin: 0;
   padding: 0;
-  background: var(--text);
+  background: transparent;
   position: relative;
   display: inline-block;
   width: 130px;
@@ -698,7 +725,7 @@ div#system{
 }
 .DateInput_input__focused{
   outline: 0;
-  background: var(--text);
+  background: transparent;
   border: 0;
 }
 
@@ -707,14 +734,19 @@ div#system{
 .DateInput_input_1{
   height: 48px !important;
   font-size: 1.1em !important;
-  background-color: #f0f8ff !important;
-  border: 2px solid #0074D9 !important;
+  background-color: transparent !important;
+  border: none !important;
   color: #fff;
 }
 .DateInput_input:focus,
 .DateInput_input_1:focus{
-  border-color: #FF4136 !important;
-  box-shadow: 0 0 0 2px rgba(255,65,54,0.3) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.DateInput_input:focus-visible{
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 4px;
 }
 
 /* Selected / hovered days (final winning versions) */
@@ -977,6 +1009,82 @@ a.dropdown-item{
 }
 
 .notification{ color: red; }
+
+/* ========= Feature computation progress ========= */
+.feature_progress{
+  padding-top: 24px;
+}
+.feature_progress_status{
+  text-align: right;
+  margin-bottom: 12px;
+}
+/* ========= Shared default tables ========= */
+/* Presentation tables (including dynamically styled date-picker calendars)
+   retain their component sizing and cell styles. */
+.selfx_table_card, .benchmark_card {
+  margin-bottom: 24px;
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #e5e7ef;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(25, 24, 53, 0.04);
+}
+
+.selfx_table_card:focus-visible, .benchmark_card:focus-visible {
+  outline: 2px solid #247e78 !important;
+  outline-offset: 3px;
+}
+
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) {
+  width: 100%;
+  min-width: 580px;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: var(--text, #191835);
+}
+
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) caption {
+  caption-side: top;
+  padding: 20px 24px;
+  text-align: left;
+  color: var(--text, #191835);
+  font-size: 17px;
+  font-weight: 600;
+  border-bottom: 3px solid var(--accent, #7bfcef);
+}
+
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) th,
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) td {
+  padding: 18px 24px;
+  border-bottom: 1px solid #eceef4;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) thead th {
+  background: #f5f6fa;
+  color: #606177;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) th:first-child,
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) td:first-child {
+  text-align: left;
+  width: 40%;
+}
+
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) tbody th,
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) tbody td:first-child { font-weight: 500; }
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) tbody tr:nth-child(even) { background: #fafbfc; }
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) tbody tr:hover { background: #effbf9; }
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) tbody tr:last-child > * { border-bottom: 0; }
+:where(table:not(.CalendarMonth_table):not([role="presentation"])) td[colspan] { text-align: left; color: #66677c; }
+@media (max-width: 640px) {
+  :where(table:not(.CalendarMonth_table):not([role="presentation"])) th, :where(table:not(.CalendarMonth_table):not([role="presentation"])) td { padding: 14px 16px; }
+  :where(table:not(.CalendarMonth_table):not([role="presentation"])) caption { padding: 18px 16px; }
+}
 
 /* ========= Dash table accent vars ========= */
 .Select-menu-outer{ --accent: var(--topbar); } /* keep */

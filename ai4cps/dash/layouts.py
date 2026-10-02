@@ -4,11 +4,27 @@
 
 
 import base64
+import mimetypes
+from pathlib import Path
 from ai4cps.dash.routing_utils import construct_id, construct_url, ROUTE_PREFIX
 from dash import dcc, html, State, Input, Output
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 import mlflow
+
+
+def _logo_paths(logo):
+    if not logo:
+        return []
+    return [logo] if isinstance(logo, (str, Path)) else list(logo)
+
+
+def _logo_image(path, class_name):
+    path = Path(path)
+    mime_type = mimetypes.guess_type(str(path))[0] or "image/png"
+    encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+    return html.Img(src=f"data:{mime_type};base64,{encoded}",
+                    className=class_name, alt=path.stem)
 
 
 def get_sidebar(app, system, user, feature, start, end):
@@ -25,6 +41,12 @@ def get_sidebar(app, system, user, feature, start, end):
         nav_children.append(new_link)
 
     content = [dbc.Nav(children=nav_children, vertical=True, pills=True, id=construct_id('nav_tools'))]
+    extra_logos = _logo_paths(getattr(app, "logo", None))[1:]
+    if extra_logos:
+        content.append(html.Div(
+            [_logo_image(path, "sidebar_logo") for path in extra_logos],
+            className="sidebar_logos",
+        ))
 
     sidebar = html.Div(content, className="sidebar_style")
     return sidebar
@@ -72,6 +94,7 @@ def get_topbar(
     topbar_elements_right.append(dcc.DatePickerRange(
         id='date-picker', persistence=False, start_date=start.replace('_', '.'), style=style,
         end_date=end.replace('_', '.'), display_format='DD.MM.YYYY', minimum_nights=0, updatemode='bothdates'))
+    show_reevaluate = show_reevaluate and getattr(feature_object, "show_reevaluate", True)
     reevaluate_style = {} if show_reevaluate else {'display': 'none'}
     topbar_elements_right.append(html.Button(className="reevaluate_button",
                                                          id=construct_id("reevaluate"),
@@ -83,28 +106,26 @@ def get_topbar(
 
     selfxlogo = selfx.app.get_asset_url('Logo dark.svg')
 
-    if not logo:
+    logos = _logo_paths(logo)
+    if not logos:
         topbar_elements.append(html.Div(html.A(html.Img(className='logo', src=selfxlogo), href=ROUTE_PREFIX.rstrip("/")),
                                         className="logo_div"))
     else:
-        topbar_elements = []
-
-        for l in logo:
-            # Read and encode the image
-            with open(l, 'rb') as image_file:
-                encoded_image = base64.b64encode(image_file.read()).decode('ascii')
-
-            if l.endswith('svg'):
-                src = 'data:image/svg+xml;base64,{}'.format(encoded_image)
-            else:
-                src = 'data:image/png;base64,{}'.format(encoded_image)
-            topbar_elements.append(html.Div(html.A(html.Img(className='logo', src=src), href=ROUTE_PREFIX.rstrip("/")), className="logo_div"))
-        # topbar_elements_left.append(html.Label("Plant:", className="dropdownLabel"))
+        topbar_elements.append(html.Div(
+            html.A(_logo_image(logos[0], "logo"), href=ROUTE_PREFIX.rstrip("/")),
+            className="logo_div",
+        ))
 
     dd_elements = []
     for el in for_plant_dropdown:
+        target_roles = selfx.features[el['label']]
+        target_role = role if role in target_roles and role != "Background" else next(
+            name for name, items in target_roles.items() if name != "Background" and items
+        )
+        target_features = target_roles[target_role]
+        target_feature = feature if feature in target_features else next(iter(target_features))
         dd_elements.append(dbc.DropdownMenuItem(el['label'],
-                                                href=construct_url(el['label'], role, feature, start, end)))
+                                                href=construct_url(el['label'], target_role, target_feature, start, end)))
     dropdown = dbc.DropdownMenu(children=dd_elements, label=system, id=construct_id('plant_dropdown'), className='plant_dropdown')
     # dcc.Dropdown(id=construct_id("plant_dropdown"),
     #              className='plant_dropdown',
@@ -120,7 +141,9 @@ def get_topbar(
     if role_options and role_options != ["Default"]:
         dd_elements = []
         for el in role_options:
-            dd_elements.append(dbc.DropdownMenuItem(el, href=construct_url(system, el, feature, start, end)))
+            target_features = selfx.features.get(system, {}).get(el, {})
+            target_feature = feature if feature in target_features else next(iter(target_features), feature)
+            dd_elements.append(dbc.DropdownMenuItem(el, href=construct_url(system, el, target_feature, start, end)))
         dropdown = dbc.DropdownMenu(children=dd_elements, label=role, id=construct_id('role_dropdown'), className='role_dropdown')
         topbar_elements_left.append(dropdown)
 

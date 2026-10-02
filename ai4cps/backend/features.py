@@ -148,9 +148,12 @@ class Feature(Task):
         Whether this feature is intended for periodic execution.
     fetching : bool
         Whether this feature represents a data-fetching task.
+    show_reevaluate : bool
+        Show the dashboard Reevaluate button for this feature, unless globally hidden.
     """
     abstract = True
     required_features: tuple[str] = ()
+    show_reevaluate: bool = True
 
     @classmethod
     def feature_name(cls) -> str:
