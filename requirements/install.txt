@@ -13,8 +13,7 @@ dill
 joblib
 celery
 redis
-ml4cps
-mlflow
+ml4cps>=0.2.13
 pydotplus
 pytz
 requests

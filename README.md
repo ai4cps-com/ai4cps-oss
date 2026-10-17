@@ -27,6 +27,23 @@ at the [Professorship of Computer Science in Mechanical Engineering](https://www
 at the Institute of Automation Technology.
 
 
+### Installation
+
+```sh
+pip install ai4cps
+```
+
+The default installation does not require MLflow or PyTorch. It requires
+`ml4cps>=0.2.13`, where both dependencies are optional.
+For the MLflow-backed `machine_learning()` saved-model selector, install:
+
+```sh
+pip install "ai4cps[mlflow]"
+```
+
+The dashboard and feature execution work without MLflow. The `dev` extra
+includes MLflow for development and testing.
+
 ### AI4CPS App Examples
 
 To be added.

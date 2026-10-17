@@ -10,7 +10,6 @@ from ai4cps.dash.routing_utils import construct_id, construct_url, ROUTE_PREFIX
 from dash import dcc, html, State, Input, Output
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
-import mlflow
 
 
 def _logo_paths(logo):
@@ -158,6 +157,15 @@ def get_topbar(
 
 
 def machine_learning(app=None, method="", **kwargs):
+    try:
+        import mlflow
+    except ModuleNotFoundError as exc:
+        if exc.name != "mlflow":
+            raise
+        raise ImportError(
+            'The MLflow model selector requires pip install "ai4cps[mlflow]".'
+        ) from exc
+
     content = []
     for k, choice in kwargs.items():
         content.append(html.Div([

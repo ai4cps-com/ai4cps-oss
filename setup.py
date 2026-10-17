@@ -30,7 +30,8 @@ setup(
     install_requires=read_req_file("install"),
     python_requires=">=3.8",
     extras_require={
-        "dev": read_req_file("dev"),
+        "mlflow": read_req_file("mlflow"),
+        "dev": read_req_file("dev") + read_req_file("mlflow"),
     },
     entry_points={
         "console_scripts": [],
