@@ -867,6 +867,7 @@ summary::marker{ color: var(--accent); }
   border-radius: 0;
   background-color: #1B1A39;
   color: #fff;
+  height: var(--h-control);
 }
 .delete_button{
   background-color: red;
