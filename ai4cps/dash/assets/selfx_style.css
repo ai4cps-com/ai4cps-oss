@@ -266,6 +266,14 @@ A{
   background-color: var(--accent);
   color: var(--text);
 }
+.sidebar_group_title{
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 8px 20px 2px;
+  text-transform: uppercase;
+}
 
 /* ========= Generic Buttons / Links ========= */
 button{

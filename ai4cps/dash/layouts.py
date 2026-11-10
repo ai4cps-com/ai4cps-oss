@@ -29,10 +29,14 @@ def _logo_image(path, class_name):
 def get_sidebar(app, system, user, feature, start, end):
     features = app.features[system].get(user, dict())
     nav_children = []
+    group = None
     for feature_name, feature_class in features.items():
         feature_obj = feature_class()
+        previous, group = group, feature_obj.sidebar_group()
+        if group not in (None, previous):
+            nav_children.append(html.Div(group, className="sidebar_group_title"))
         nav_link_children = [html.I(feature_obj.icon(), className="material-icons"),
-                             feature_name]
+                             feature_obj.label()]
         new_link = dbc.NavLink(children=nav_link_children,
                                href=construct_url(system, user, feature_name, start, end),
                                id=construct_id(system, user, feature_name), active=feature_name == feature,
@@ -63,6 +67,8 @@ def get_topbar(
     start,
     end,
     show_reevaluate=True,
+    reevaluate_label="Reevaluate",
+    reevaluate_tooltip=None,
 ):
     topbar_elements_left = []
     topbar_elements_right = []
@@ -98,8 +104,9 @@ def get_topbar(
     topbar_elements_right.append(html.Button(className="reevaluate_button",
                                                          id=construct_id("reevaluate"),
                                                          style=reevaluate_style,
+                                                         title=reevaluate_tooltip,
                                                          children=[html.I('replay', className="material-icons"),
-                                                                   'Reevaluate']))
+                                                                   reevaluate_label]))
 
     for_plant_dropdown = [{"label": sn, "value": sn} for sn in systems]
 

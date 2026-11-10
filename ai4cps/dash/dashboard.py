@@ -117,6 +117,8 @@ class Dash4CPS:
         content_not_ready_refresh_interval: float = 0.5,
         css_overrides: Optional[Union[str, Path, Sequence[Union[str, Path]]]] = None,
         show_reevaluate: bool = True,
+        reevaluate_label: str = "Reevaluate",
+        reevaluate_tooltip: Optional[str] = None,
     ) -> None:
         # ---- Inputs / config ----
         self.roles = tuple(roles) if roles is not None else ()
@@ -125,6 +127,8 @@ class Dash4CPS:
         self.logo = logo
         self.initial_date = initial_date
         self.show_reevaluate = show_reevaluate
+        self.reevaluate_label = reevaluate_label
+        self.reevaluate_tooltip = reevaluate_tooltip
 
         self.work_day_shift = work_day_shift
         self.analysis_period = analysis_period
@@ -354,6 +358,8 @@ class Dash4CPS:
                 logo=self._normalize_logos(),
                 date_picker=self._date_picker_enabled(system, feature, role),
                 show_reevaluate=self.show_reevaluate,
+                reevaluate_label=self.reevaluate_label,
+                reevaluate_tooltip=self.reevaluate_tooltip,
                 system=system,
                 role=role,
                 feature=feature,
@@ -452,7 +458,7 @@ class Dash4CPS:
             elif type(content) is tuple:
                 content, tool_title = content
             else:
-                tool_title = feature
+                tool_title = feature_object.label()
 
             # CREATING UI
             name = system

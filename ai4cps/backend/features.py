@@ -341,6 +341,28 @@ class Feature(Task):
         """
         return "extension"
 
+    def label(self) -> str:
+        """
+        Return the name shown to users in the sidebar and as the page title.
+
+        Returns
+        -------
+        str
+            The canonical feature name; override for a more readable one.
+        """
+        return self.feature_name()
+
+    def sidebar_group(self) -> Optional[str]:
+        """
+        Return the sidebar heading this feature is listed under.
+
+        Returns
+        -------
+        str | None
+            Heading shown above the first feature of each group, or ``None`` for no heading.
+        """
+        return None
+
     def register_callbacks(self, dash_app: Any, analysis: Any) -> None:
         """
         Register UI callbacks for this feature.
