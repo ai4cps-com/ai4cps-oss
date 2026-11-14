@@ -150,10 +150,13 @@ class Feature(Task):
         Whether this feature represents a data-fetching task.
     show_reevaluate : bool
         Show the dashboard Reevaluate button for this feature, unless globally hidden.
+    background_execution : bool
+        Run eager feature requests outside the dashboard's HTTP callback.
     """
     abstract = True
     required_features: tuple[str] = ()
     show_reevaluate: bool = True
+    background_execution: bool = False
 
     @classmethod
     def feature_name(cls) -> str:
