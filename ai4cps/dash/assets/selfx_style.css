@@ -983,6 +983,7 @@ summary::marker{ color: var(--accent); }
   border-radius: 0;
   background-color: var(--ai4cps-text);
   color: var(--ai4cps-surface);
+  height: var(--h-control);
 }
 .delete_button{
   background-color: var(--ai4cps-error);
