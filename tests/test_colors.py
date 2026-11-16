@@ -4,6 +4,8 @@ import pytest
 from ai4cps.dash.colors import (
     BLACK,
     NEGATIVE,
+    NEUTRAL,
+    OTHER,
     POSITIVE,
     TRANSPARENT,
     WHITE,
@@ -77,7 +79,7 @@ def test_opacity_rejects_rgb():
 
 def test_iterate_wraps():
     first = iterate(0)
-    wrapped = iterate(10)
+    wrapped = iterate(len(NEUTRAL) + len(OTHER))
     assert first == wrapped
 
 
