@@ -28,12 +28,13 @@ from ai4cps.backend.features import AnalysisManager, Feature, get_analysis_inter
 from ai4cps.backend.perform import perform_requested_features, get_requested_features
 from ai4cps.backend.results import delete_files, get_result, is_stored
 from ai4cps.dash import colors
-from ai4cps.dash.routing_utils import construct_id, parse_url, construct_url, get_today, ROUTE_PREFIX
+from ai4cps.dash.routing_utils import (construct_id, parse_url, construct_url, deprecated_route_redirect, get_today,
+                                       ROUTE_PREFIX)
 from ai4cps.dash.layouts import get_sidebar, get_topbar
 
 
 
-TITLE = "SelfX"
+TITLE = "AI4CPS"
 
 logger = logging.getLogger(__name__)
 
@@ -266,6 +267,13 @@ class Dash4CPS:
 
     def _initialize_server(self) -> None:
         """Finalize layout and register routing callbacks."""
+
+        @self.app.server.before_request
+        def redirect_deprecated_route():
+            # 308 keeps the method, so Dash requests of a tab opened under the old path keep working.
+            target = deprecated_route_redirect(request.url)
+            if target:
+                return redirect(target, code=308)
 
         @self.app.server.before_request
         def redirect_dashboard_root():

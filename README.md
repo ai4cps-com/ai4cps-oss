@@ -51,3 +51,4 @@ To be added.
 
 Install `ai4cps` and import from `ai4cps`, for example `from ai4cps.dash.dashboard import Dash4CPS`.
 The deprecated `selfx` distribution provides compatibility for legacy `selfx` imports.
+Dashboards are served under `/ai4cps/`; the deprecated `/selfx/` path redirects to the same `/ai4cps/` address.

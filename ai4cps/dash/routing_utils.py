@@ -3,11 +3,22 @@
 # Contact: nemanja@ai4cps.com
 
 
-from urllib.parse import unquote
+from urllib.parse import unquote, urlsplit, urlunsplit
 import datetime
 from ai4cps.backend.datetime_utils import str_to_datetime
 
-ROUTE_PREFIX = "/selfx/"
+ROUTE_PREFIX = "/ai4cps/"
+# Deprecated: the dashboard's old path. Its links keep working, as they are redirected to ROUTE_PREFIX.
+DEPRECATED_ROUTE_PREFIX = "/selfx/"
+
+
+def deprecated_route_redirect(url):
+    """The ROUTE_PREFIX address of a link under DEPRECATED_ROUTE_PREFIX, with the rest of its path and its query;
+    None for any other link. Browsers keep the fragment themselves, as the server never sees it."""
+    parts = urlsplit(url)
+    if parts.path != DEPRECATED_ROUTE_PREFIX.rstrip("/") and not parts.path.startswith(DEPRECATED_ROUTE_PREFIX):
+        return None
+    return urlunsplit(("", "", ROUTE_PREFIX + parts.path[len(DEPRECATED_ROUTE_PREFIX):], parts.query, ""))
 
 def parse_url(pathname):  # , href):
     feature = unquote(pathname[1:])
