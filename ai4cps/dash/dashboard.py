@@ -158,6 +158,7 @@ class Dash4CPS:
             routes_pathname_prefix=ROUTE_PREFIX,
             requests_pathname_prefix=ROUTE_PREFIX,
             title=TITLE,
+            update_title=None,  # the tab keeps the title instead of showing "Updating..." while a page loads
             assets_folder=os.path.join(os.path.dirname(__file__), "assets"),
         )
         for route, endpoint, view_func in override_routes:

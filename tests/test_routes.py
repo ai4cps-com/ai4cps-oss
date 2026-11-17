@@ -17,12 +17,23 @@ class Overview(Feature):
 
 
 @pytest.fixture
-def client(tmp_path, monkeypatch):
+def app(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)  # the server clears Analysis/Online in the working folder
     app = Dash4CPS()
     app.add_system("Tiny Plant", features=[Overview])
     app._initialize_server()
+    return app
+
+
+@pytest.fixture
+def client(app):
     return app.app.server.test_client()
+
+
+def test_the_tab_says_ai4cps_also_while_pages_update(app, client):
+    page = client.get("/ai4cps/Tiny%20Plant/Default/Overview/2026-11-17/2026-11-17").get_data(as_text=True)
+    assert "<title>AI4CPS</title>" in page
+    assert app.app.config.update_title is None  # Dash would show "Updating..." instead
 
 
 def test_links_use_the_ai4cps_path():
