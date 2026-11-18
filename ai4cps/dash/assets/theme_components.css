@@ -1,0 +1,824 @@
+/* Reusable AI4CPS dashboard components. Colors come from theme.css. */
+.small-inline-button,
+button.minor_button {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.625rem;
+    border: 1px solid var(--bs-btn-border-color, var(--ai4cps-border));
+    border-radius: 0.375rem;
+    background: var(--bs-btn-bg, var(--ai4cps-surface));
+    color: var(--bs-btn-color, var(--ai4cps-text));
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+.small-inline-button > i { padding: 0; }
+.small-inline-button:hover {
+    background-color: var(--bs-btn-hover-bg, var(--ai4cps-hover));
+    color: var(--bs-btn-hover-color, var(--ai4cps-surface));
+    border-color: var(--bs-btn-hover-border-color, var(--ai4cps-hover));
+}
+.small-inline-button:is(:active, .active) {
+    background-color: var(--bs-btn-active-bg);
+    color: var(--bs-btn-active-color);
+    border-color: var(--bs-btn-active-border-color);
+}
+.small-inline-button:disabled { opacity: 0.5; cursor: default; }
+.icon-button { flex-shrink: 0; width: 2rem; height: 2rem; padding: 0; }
+.icon-button > i { margin: 0; padding: 0; line-height: 1; }
+.copy-button { min-height: 0; border: 0; padding: 0; background: transparent; color: var(--ai4cps-muted); }
+.copy-button:hover { background: transparent; color: var(--ai4cps-text); }
+.copy-badge, .badge-action {
+    display: inline-flex;
+    margin: 0 0.25rem 0.35rem 0;
+    border-radius: var(--bs-border-radius, 0.375rem);
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.copy-badge > .badge, .badge-action > .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+}
+
+.copy-badge > .badge::after {
+    content: "\f0c5";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 400;
+    font-size: 0.9em;
+    width: 1em;
+    text-align: center;
+    opacity: 0.8;
+}
+
+.copy-badge:hover, .badge-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.22);
+}
+
+.copy-badge:focus-visible, .badge-action:focus-visible {
+    outline: 2px solid var(--ai4cps-sidebar);
+    outline-offset: 3px;
+}
+
+.copy-badge:active, .badge-action:active {
+    transform: translateY(0);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.copy-badge.is-copied > .badge::after {
+    content: "\f00c";
+    font-weight: 900;
+    opacity: 1;
+}
+
+.copy-badge.is-copy-failed > .badge::after {
+    content: "\f06a";
+    font-weight: 900;
+    opacity: 1;
+}
+
+.copy-button.is-copied > i,
+.copy-button.is-copy-failed > i,
+.clipboard-action.is-copied > i,
+.clipboard-action.is-copy-failed > i {
+    font-weight: 900;
+}
+
+.copy-button.is-copied > i::before,
+.clipboard-action.is-copied > i::before {
+    content: "\f00c";
+}
+
+.copy-button.is-copy-failed > i::before,
+.clipboard-action.is-copy-failed > i::before {
+    content: "\f06a";
+}
+
+.accordion-with-action {
+    display: grid;
+    grid-template-columns: max-content 1.75rem minmax(1.25rem, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 0.5rem;
+    position: relative;
+}
+
+.accordion-with-action > .accordion-item {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+    grid-column: 1 / -1;
+    grid-row: 1 / span 2;
+}
+
+.accordion-with-action .accordion-header {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    grid-row: 1;
+}
+
+.accordion-with-action .accordion-button {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+}
+
+.accordion-with-action .accordion-button::after {
+    grid-column: 3;
+    justify-self: end;
+    margin-left: 0;
+}
+
+.accordion-with-action .accordion-collapse {
+    grid-column: 1 / -1;
+    grid-row: 2;
+}
+
+.accordion-with-action > .copy-button {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    margin-left: 0 !important;
+    width: 1.75rem;
+    height: 1.5rem;
+    line-height: 1;
+    z-index: 4;
+}
+
+.accordion-with-action > .copy-button > i {
+    padding: 0;
+}
+
+.accordion-with-action > .copy-button:focus-visible {
+    outline: 2px solid var(--ai4cps-hover) !important;
+    outline-offset: 2px;
+}
+
+.accordion-flush > .accordion-with-action > .accordion-item {
+    --bs-accordion-border-radius: 0;
+    --bs-accordion-inner-border-radius: 0;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+}
+
+.accordion-flush > .accordion-with-action:first-child > .accordion-item {
+    border-top: 0;
+}
+
+.accordion-flush > .accordion-with-action:last-child > .accordion-item {
+    border-bottom: 0;
+}
+
+.toggle-button,
+.small-inline-button {
+    --bs-btn-color: var(--ai4cps-text);
+    --bs-btn-bg: var(--ai4cps-surface);
+    --bs-btn-border-color: var(--ai4cps-sidebar);
+    --bs-btn-hover-color: var(--ai4cps-surface);
+    --bs-btn-hover-bg: var(--ai4cps-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-hover);
+    --bs-btn-active-color: var(--ai4cps-text);
+    --bs-btn-active-bg: var(--ai4cps-positive);
+    --bs-btn-active-border-color: var(--ai4cps-sidebar);
+    /* Keep borders consistent in headers and footers. */
+    border-color: var(--bs-btn-border-color);
+}
+
+.form-editor-wide .modal-dialog {
+    max-width: min(80rem, calc(100% - var(--bs-modal-margin) * 2));
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-editor .modal-content {
+    display: flex !important;
+    position: relative !important;
+    width: 100% !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+}
+
+.form-editor .form-control {
+    color: var(--ai4cps-text);
+    background-color: var(--ai4cps-surface);
+    border-color: var(--ai4cps-border);
+    caret-color: var(--ai4cps-text);
+}
+
+.form-editor .form-control:enabled:hover {
+    border-color: var(--ai4cps-hover);
+}
+
+.form-editor .form-control:focus {
+    color: var(--ai4cps-text);
+    background-color: var(--ai4cps-surface);
+    border-color: var(--ai4cps-positive);
+    box-shadow: none;
+}
+
+.form-editor .form-control:disabled {
+    color: var(--ai4cps-muted);
+    background-color: var(--ai4cps-surface-subtle);
+    border-color: var(--ai4cps-border);
+}
+
+.small-inline-button:focus-visible,
+.toggle-positive:focus-visible,
+.form-editor .form-control:focus-visible,
+.form-editor .btn-check:focus-visible + .toggle-button {
+    outline: 2px solid var(--ai4cps-hover) !important;
+    outline-offset: 2px;
+    border-style: solid;
+}
+
+.negative-selector,
+.warning-selector,
+.diagnosis-selector,
+.configuration-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.negative-selector .form-check,
+.warning-selector .form-check,
+.diagnosis-selector .form-check,
+.configuration-selector .form-check {
+    padding-left: 0;
+    margin: 0;
+}
+
+.negative-selector .form-check-label,
+.warning-selector .form-check-label,
+.diagnosis-selector .form-check-label,
+.configuration-selector .form-check-label {
+    margin: 0;
+    cursor: pointer;
+}
+
+.negative-selector .toggle-button {
+    --bs-btn-active-bg: var(--ai4cps-negative);
+    --bs-btn-active-border-color: var(--ai4cps-negative);
+}
+
+.warning-selector .toggle-button {
+    --bs-btn-active-color: var(--ai4cps-on-warning);
+    --bs-btn-active-bg: var(--ai4cps-warning);
+    --bs-btn-active-border-color: var(--ai4cps-warning);
+}
+
+.configuration-selector .toggle-button {
+    --configuration-color: var(--ai4cps-off);
+    --bs-btn-color: var(--ai4cps-on-off);
+    --bs-btn-bg: var(--configuration-color);
+    --bs-btn-border-color: var(--configuration-color);
+    --bs-btn-hover-color: var(--ai4cps-on-off);
+    --bs-btn-hover-bg: var(--configuration-color);
+    --bs-btn-hover-border-color: var(--configuration-color);
+    --bs-btn-active-color: var(--ai4cps-on-reconfiguration);
+    --bs-btn-active-bg: var(--ai4cps-reconfiguration);
+    --bs-btn-active-border-color: var(--ai4cps-reconfiguration);
+}
+
+.configuration-selector .toggle-button.active {
+    --configuration-color: var(--ai4cps-reconfiguration);
+    --bs-btn-color: var(--ai4cps-on-reconfiguration);
+    --bs-btn-hover-color: var(--ai4cps-on-reconfiguration);
+}
+
+.configuration-selector .toggle-button.active:has(.original-on),
+.configuration-selector .toggle-button:not(.active):has(.original-off) {
+    --configuration-color: var(--ai4cps-unchanged);
+    --bs-btn-color: var(--ai4cps-on-unchanged);
+    --bs-btn-hover-color: var(--ai4cps-on-unchanged);
+    --bs-btn-active-color: var(--ai4cps-on-unchanged);
+    --bs-btn-active-bg: var(--ai4cps-unchanged);
+    --bs-btn-active-border-color: var(--ai4cps-unchanged);
+}
+
+.diagnosis-selector .toggle-button {
+    --bs-btn-active-color: var(--ai4cps-on-diagnosis);
+    --bs-btn-active-bg: var(--ai4cps-diagnosis);
+    --bs-btn-active-border-color: var(--ai4cps-diagnosis);
+}
+
+.configuration-selector .state-on,
+.configuration-selector .active .state-off {
+    display: none;
+}
+
+.configuration-selector .active .state-on {
+    display: inline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .small-inline-button,
+    button.minor_button,
+    .copy-badge,
+    .copy-badge > .badge,
+    .badge-action,
+    .badge-action > .badge {
+        transition: none;
+    }
+}
+
+.btn-positive, .button-positive {
+    --bs-btn-color: var(--ai4cps-on-positive);
+    --bs-btn-bg: var(--ai4cps-positive);
+    --bs-btn-border-color: var(--ai4cps-positive);
+    --bs-btn-hover-color: var(--ai4cps-on-positive-hover);
+    --bs-btn-hover-bg: var(--ai4cps-positive-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-positive-hover);
+    --bs-btn-active-color: var(--ai4cps-on-positive);
+    --bs-btn-active-bg: var(--ai4cps-positive);
+    --bs-btn-active-border-color: var(--ai4cps-positive);
+}
+.bg-positive, .text-bg-positive { background-color: var(--ai4cps-positive) !important; color: var(--ai4cps-on-positive) !important; }
+.text-positive { color: var(--ai4cps-positive) !important; }
+.btn-outline-positive {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-positive);
+    --bs-btn-hover-color: var(--ai4cps-on-positive); --bs-btn-hover-bg: var(--ai4cps-positive);
+    --bs-btn-hover-border-color: var(--ai4cps-positive);
+    --bs-btn-active-color: var(--ai4cps-on-positive); --bs-btn-active-bg: var(--ai4cps-positive);
+    --bs-btn-active-border-color: var(--ai4cps-positive);
+}
+.alert-positive { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-positive); }
+
+.btn-negative, .button-negative {
+    --bs-btn-color: var(--ai4cps-on-negative);
+    --bs-btn-bg: var(--ai4cps-negative);
+    --bs-btn-border-color: var(--ai4cps-negative);
+    --bs-btn-hover-color: var(--ai4cps-on-negative-hover);
+    --bs-btn-hover-bg: var(--ai4cps-negative-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-negative-hover);
+    --bs-btn-active-color: var(--ai4cps-on-negative);
+    --bs-btn-active-bg: var(--ai4cps-negative);
+    --bs-btn-active-border-color: var(--ai4cps-negative);
+}
+.bg-negative, .text-bg-negative { background-color: var(--ai4cps-negative) !important; color: var(--ai4cps-on-negative) !important; }
+.text-negative { color: var(--ai4cps-negative) !important; }
+.btn-outline-negative {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-negative);
+    --bs-btn-hover-color: var(--ai4cps-on-negative); --bs-btn-hover-bg: var(--ai4cps-negative);
+    --bs-btn-hover-border-color: var(--ai4cps-negative);
+    --bs-btn-active-color: var(--ai4cps-on-negative); --bs-btn-active-bg: var(--ai4cps-negative);
+    --bs-btn-active-border-color: var(--ai4cps-negative);
+}
+.alert-negative { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-negative); }
+
+.btn-error, .button-error {
+    --bs-btn-color: var(--ai4cps-on-error);
+    --bs-btn-bg: var(--ai4cps-error);
+    --bs-btn-border-color: var(--ai4cps-error);
+    --bs-btn-hover-color: var(--ai4cps-on-error-hover);
+    --bs-btn-hover-bg: var(--ai4cps-error-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-error-hover);
+    --bs-btn-active-color: var(--ai4cps-on-error);
+    --bs-btn-active-bg: var(--ai4cps-error);
+    --bs-btn-active-border-color: var(--ai4cps-error);
+}
+.bg-error, .text-bg-error { background-color: var(--ai4cps-error) !important; color: var(--ai4cps-on-error) !important; }
+.text-error { color: var(--ai4cps-error) !important; }
+.btn-outline-error {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-error);
+    --bs-btn-hover-color: var(--ai4cps-on-error); --bs-btn-hover-bg: var(--ai4cps-error);
+    --bs-btn-hover-border-color: var(--ai4cps-error);
+    --bs-btn-active-color: var(--ai4cps-on-error); --bs-btn-active-bg: var(--ai4cps-error);
+    --bs-btn-active-border-color: var(--ai4cps-error);
+}
+.alert-error { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-error); }
+
+.btn-diagnosis, .button-diagnosis {
+    --bs-btn-color: var(--ai4cps-on-diagnosis);
+    --bs-btn-bg: var(--ai4cps-diagnosis);
+    --bs-btn-border-color: var(--ai4cps-diagnosis);
+    --bs-btn-hover-color: var(--ai4cps-on-diagnosis-hover);
+    --bs-btn-hover-bg: var(--ai4cps-diagnosis-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-diagnosis-hover);
+    --bs-btn-active-color: var(--ai4cps-on-diagnosis);
+    --bs-btn-active-bg: var(--ai4cps-diagnosis);
+    --bs-btn-active-border-color: var(--ai4cps-diagnosis);
+}
+.bg-diagnosis, .text-bg-diagnosis { background-color: var(--ai4cps-diagnosis) !important; color: var(--ai4cps-on-diagnosis) !important; }
+.text-diagnosis { color: var(--ai4cps-diagnosis) !important; }
+.btn-outline-diagnosis {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-diagnosis);
+    --bs-btn-hover-color: var(--ai4cps-on-diagnosis); --bs-btn-hover-bg: var(--ai4cps-diagnosis);
+    --bs-btn-hover-border-color: var(--ai4cps-diagnosis);
+    --bs-btn-active-color: var(--ai4cps-on-diagnosis); --bs-btn-active-bg: var(--ai4cps-diagnosis);
+    --bs-btn-active-border-color: var(--ai4cps-diagnosis);
+}
+.alert-diagnosis { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-diagnosis); }
+
+.btn-off, .button-off {
+    --bs-btn-color: var(--ai4cps-on-off);
+    --bs-btn-bg: var(--ai4cps-off);
+    --bs-btn-border-color: var(--ai4cps-off);
+    --bs-btn-hover-color: var(--ai4cps-on-off-hover);
+    --bs-btn-hover-bg: var(--ai4cps-off-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-off-hover);
+    --bs-btn-active-color: var(--ai4cps-on-off);
+    --bs-btn-active-bg: var(--ai4cps-off);
+    --bs-btn-active-border-color: var(--ai4cps-off);
+}
+.bg-off, .text-bg-off { background-color: var(--ai4cps-off) !important; color: var(--ai4cps-on-off) !important; }
+.text-off { color: var(--ai4cps-off) !important; }
+.btn-outline-off {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-off);
+    --bs-btn-hover-color: var(--ai4cps-on-off); --bs-btn-hover-bg: var(--ai4cps-off);
+    --bs-btn-hover-border-color: var(--ai4cps-off);
+    --bs-btn-active-color: var(--ai4cps-on-off); --bs-btn-active-bg: var(--ai4cps-off);
+    --bs-btn-active-border-color: var(--ai4cps-off);
+}
+.alert-off { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-off); }
+
+.btn-unchanged, .button-unchanged {
+    --bs-btn-color: var(--ai4cps-on-unchanged);
+    --bs-btn-bg: var(--ai4cps-unchanged);
+    --bs-btn-border-color: var(--ai4cps-unchanged);
+    --bs-btn-hover-color: var(--ai4cps-on-unchanged-hover);
+    --bs-btn-hover-bg: var(--ai4cps-unchanged-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-unchanged-hover);
+    --bs-btn-active-color: var(--ai4cps-on-unchanged);
+    --bs-btn-active-bg: var(--ai4cps-unchanged);
+    --bs-btn-active-border-color: var(--ai4cps-unchanged);
+}
+.bg-unchanged, .text-bg-unchanged { background-color: var(--ai4cps-unchanged) !important; color: var(--ai4cps-on-unchanged) !important; }
+.text-unchanged { color: var(--ai4cps-unchanged) !important; }
+.btn-outline-unchanged {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-unchanged);
+    --bs-btn-hover-color: var(--ai4cps-on-unchanged); --bs-btn-hover-bg: var(--ai4cps-unchanged);
+    --bs-btn-hover-border-color: var(--ai4cps-unchanged);
+    --bs-btn-active-color: var(--ai4cps-on-unchanged); --bs-btn-active-bg: var(--ai4cps-unchanged);
+    --bs-btn-active-border-color: var(--ai4cps-unchanged);
+}
+.alert-unchanged { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-unchanged); }
+
+.btn-reconfiguration, .button-reconfiguration {
+    --bs-btn-color: var(--ai4cps-on-reconfiguration);
+    --bs-btn-bg: var(--ai4cps-reconfiguration);
+    --bs-btn-border-color: var(--ai4cps-reconfiguration);
+    --bs-btn-hover-color: var(--ai4cps-on-reconfiguration-hover);
+    --bs-btn-hover-bg: var(--ai4cps-reconfiguration-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-reconfiguration-hover);
+    --bs-btn-active-color: var(--ai4cps-on-reconfiguration);
+    --bs-btn-active-bg: var(--ai4cps-reconfiguration);
+    --bs-btn-active-border-color: var(--ai4cps-reconfiguration);
+}
+.bg-reconfiguration, .text-bg-reconfiguration { background-color: var(--ai4cps-reconfiguration) !important; color: var(--ai4cps-on-reconfiguration) !important; }
+.text-reconfiguration { color: var(--ai4cps-reconfiguration) !important; }
+.btn-outline-reconfiguration {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-reconfiguration);
+    --bs-btn-hover-color: var(--ai4cps-on-reconfiguration); --bs-btn-hover-bg: var(--ai4cps-reconfiguration);
+    --bs-btn-hover-border-color: var(--ai4cps-reconfiguration);
+    --bs-btn-active-color: var(--ai4cps-on-reconfiguration); --bs-btn-active-bg: var(--ai4cps-reconfiguration);
+    --bs-btn-active-border-color: var(--ai4cps-reconfiguration);
+}
+.alert-reconfiguration { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-reconfiguration); }
+
+.btn-success, .button-success {
+    --bs-btn-color: var(--ai4cps-on-positive);
+    --bs-btn-bg: var(--ai4cps-positive);
+    --bs-btn-border-color: var(--ai4cps-positive);
+    --bs-btn-hover-color: var(--ai4cps-on-positive-hover);
+    --bs-btn-hover-bg: var(--ai4cps-positive-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-positive-hover);
+    --bs-btn-active-color: var(--ai4cps-on-positive);
+    --bs-btn-active-bg: var(--ai4cps-positive);
+    --bs-btn-active-border-color: var(--ai4cps-positive);
+}
+.bg-success, .text-bg-success { background-color: var(--ai4cps-positive) !important; color: var(--ai4cps-on-positive) !important; }
+.text-success { color: var(--ai4cps-positive) !important; }
+.btn-outline-success {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-positive);
+    --bs-btn-hover-color: var(--ai4cps-on-positive); --bs-btn-hover-bg: var(--ai4cps-positive);
+    --bs-btn-hover-border-color: var(--ai4cps-positive);
+    --bs-btn-active-color: var(--ai4cps-on-positive); --bs-btn-active-bg: var(--ai4cps-positive);
+    --bs-btn-active-border-color: var(--ai4cps-positive);
+}
+.alert-success { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-positive); }
+
+.btn-danger, .button-danger {
+    --bs-btn-color: var(--ai4cps-on-error);
+    --bs-btn-bg: var(--ai4cps-error);
+    --bs-btn-border-color: var(--ai4cps-error);
+    --bs-btn-hover-color: var(--ai4cps-on-error-hover);
+    --bs-btn-hover-bg: var(--ai4cps-error-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-error-hover);
+    --bs-btn-active-color: var(--ai4cps-on-error);
+    --bs-btn-active-bg: var(--ai4cps-error);
+    --bs-btn-active-border-color: var(--ai4cps-error);
+}
+.bg-danger, .text-bg-danger { background-color: var(--ai4cps-error) !important; color: var(--ai4cps-on-error) !important; }
+.text-danger { color: var(--ai4cps-error) !important; }
+.btn-outline-danger {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-error);
+    --bs-btn-hover-color: var(--ai4cps-on-error); --bs-btn-hover-bg: var(--ai4cps-error);
+    --bs-btn-hover-border-color: var(--ai4cps-error);
+    --bs-btn-active-color: var(--ai4cps-on-error); --bs-btn-active-bg: var(--ai4cps-error);
+    --bs-btn-active-border-color: var(--ai4cps-error);
+}
+.alert-danger { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-error); }
+
+.btn-warning, .button-warning {
+    --bs-btn-color: var(--ai4cps-on-warning);
+    --bs-btn-bg: var(--ai4cps-warning);
+    --bs-btn-border-color: var(--ai4cps-warning);
+    --bs-btn-hover-color: var(--ai4cps-on-warning-hover);
+    --bs-btn-hover-bg: var(--ai4cps-warning-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-warning-hover);
+    --bs-btn-active-color: var(--ai4cps-on-warning);
+    --bs-btn-active-bg: var(--ai4cps-warning);
+    --bs-btn-active-border-color: var(--ai4cps-warning);
+}
+.bg-warning, .text-bg-warning { background-color: var(--ai4cps-warning) !important; color: var(--ai4cps-on-warning) !important; }
+.text-warning { color: var(--ai4cps-warning) !important; }
+.btn-outline-warning {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-warning);
+    --bs-btn-hover-color: var(--ai4cps-on-warning); --bs-btn-hover-bg: var(--ai4cps-warning);
+    --bs-btn-hover-border-color: var(--ai4cps-warning);
+    --bs-btn-active-color: var(--ai4cps-on-warning); --bs-btn-active-bg: var(--ai4cps-warning);
+    --bs-btn-active-border-color: var(--ai4cps-warning);
+}
+.alert-warning { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-warning); }
+
+.btn-info, .button-info {
+    --bs-btn-color: var(--ai4cps-on-info);
+    --bs-btn-bg: var(--ai4cps-info);
+    --bs-btn-border-color: var(--ai4cps-info);
+    --bs-btn-hover-color: var(--ai4cps-on-info-hover);
+    --bs-btn-hover-bg: var(--ai4cps-info-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-info-hover);
+    --bs-btn-active-color: var(--ai4cps-on-info);
+    --bs-btn-active-bg: var(--ai4cps-info);
+    --bs-btn-active-border-color: var(--ai4cps-info);
+}
+.bg-info, .text-bg-info { background-color: var(--ai4cps-info) !important; color: var(--ai4cps-on-info) !important; }
+.text-info { color: var(--ai4cps-info) !important; }
+.btn-outline-info {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-info);
+    --bs-btn-hover-color: var(--ai4cps-on-info); --bs-btn-hover-bg: var(--ai4cps-info);
+    --bs-btn-hover-border-color: var(--ai4cps-info);
+    --bs-btn-active-color: var(--ai4cps-on-info); --bs-btn-active-bg: var(--ai4cps-info);
+    --bs-btn-active-border-color: var(--ai4cps-info);
+}
+.alert-info { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-info); }
+
+.btn-primary, .button-primary {
+    --bs-btn-color: var(--ai4cps-on-primary);
+    --bs-btn-bg: var(--ai4cps-primary);
+    --bs-btn-border-color: var(--ai4cps-primary);
+    --bs-btn-hover-color: var(--ai4cps-on-primary-hover);
+    --bs-btn-hover-bg: var(--ai4cps-primary-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-primary-hover);
+    --bs-btn-active-color: var(--ai4cps-on-primary);
+    --bs-btn-active-bg: var(--ai4cps-primary);
+    --bs-btn-active-border-color: var(--ai4cps-primary);
+}
+.bg-primary, .text-bg-primary { background-color: var(--ai4cps-primary) !important; color: var(--ai4cps-on-primary) !important; }
+.text-primary { color: var(--ai4cps-primary) !important; }
+.btn-outline-primary {
+    --bs-btn-color: var(--ai4cps-text); --bs-btn-border-color: var(--ai4cps-primary);
+    --bs-btn-hover-color: var(--ai4cps-on-primary); --bs-btn-hover-bg: var(--ai4cps-primary);
+    --bs-btn-hover-border-color: var(--ai4cps-primary);
+    --bs-btn-active-color: var(--ai4cps-on-primary); --bs-btn-active-bg: var(--ai4cps-primary);
+    --bs-btn-active-border-color: var(--ai4cps-primary);
+}
+.alert-primary { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-primary); }
+
+.btn-secondary, .button-secondary {
+    --bs-btn-color: var(--ai4cps-on-secondary);
+    --bs-btn-bg: var(--ai4cps-secondary);
+    --bs-btn-border-color: var(--ai4cps-secondary);
+    --bs-btn-hover-color: var(--ai4cps-on-secondary-hover);
+    --bs-btn-hover-bg: var(--ai4cps-secondary-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-secondary-hover);
+    --bs-btn-active-color: var(--ai4cps-on-secondary);
+    --bs-btn-active-bg: var(--ai4cps-secondary);
+    --bs-btn-active-border-color: var(--ai4cps-secondary);
+}
+.bg-secondary, .text-bg-secondary { background-color: var(--ai4cps-secondary) !important; color: var(--ai4cps-on-secondary) !important; }
+.text-secondary { color: var(--ai4cps-secondary) !important; }
+.btn-outline-secondary {
+    --bs-btn-color: var(--ai4cps-secondary); --bs-btn-border-color: var(--ai4cps-secondary);
+    --bs-btn-hover-color: var(--ai4cps-on-secondary); --bs-btn-hover-bg: var(--ai4cps-secondary);
+    --bs-btn-hover-border-color: var(--ai4cps-secondary);
+    --bs-btn-active-color: var(--ai4cps-on-secondary); --bs-btn-active-bg: var(--ai4cps-secondary);
+    --bs-btn-active-border-color: var(--ai4cps-secondary);
+}
+.alert-secondary { --bs-alert-bg: var(--ai4cps-surface-subtle); --bs-alert-color: var(--ai4cps-text); --bs-alert-border-color: var(--ai4cps-secondary); }
+
+.btn-cancel, .button-cancel {
+    --bs-btn-color: var(--ai4cps-on-cancel);
+    --bs-btn-bg: var(--ai4cps-cancel);
+    --bs-btn-border-color: var(--ai4cps-cancel);
+    --bs-btn-hover-color: var(--ai4cps-on-cancel-hover);
+    --bs-btn-hover-bg: var(--ai4cps-cancel-hover);
+    --bs-btn-hover-border-color: var(--ai4cps-cancel-hover);
+    --bs-btn-active-color: var(--ai4cps-on-cancel-hover);
+    --bs-btn-active-bg: var(--ai4cps-cancel-hover);
+    --bs-btn-active-border-color: var(--ai4cps-cancel-hover);
+    --bs-btn-disabled-color: var(--ai4cps-on-cancel);
+    --bs-btn-disabled-bg: var(--ai4cps-cancel);
+    --bs-btn-disabled-border-color: var(--ai4cps-cancel);
+    background-color: var(--bs-btn-bg);
+    color: var(--bs-btn-color);
+    border-color: var(--bs-btn-border-color);
+}
+.btn-cancel:hover, .button-cancel:hover { background-color: var(--bs-btn-hover-bg); color: var(--bs-btn-hover-color); border-color: var(--bs-btn-hover-border-color); }
+.btn-cancel:is(:active, .active), .button-cancel:is(:active, .active) { background-color: var(--bs-btn-active-bg); color: var(--bs-btn-active-color); border-color: var(--bs-btn-active-border-color); }
+
+.toggle-positive {
+    --bs-btn-color: var(--ai4cps-text);
+    --bs-btn-bg: color-mix(in srgb, var(--ai4cps-positive) 10%, var(--ai4cps-surface));
+    --bs-btn-border-color: color-mix(in srgb, var(--ai4cps-positive) 35%, var(--ai4cps-border));
+    --bs-btn-hover-color: var(--ai4cps-text);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--ai4cps-positive) 20%, var(--ai4cps-surface));
+    --bs-btn-hover-border-color: var(--ai4cps-positive);
+    --bs-btn-active-color: var(--ai4cps-on-positive);
+    --bs-btn-active-bg: var(--ai4cps-positive);
+    --bs-btn-active-border-color: var(--ai4cps-positive);
+}
+.negative-selector .toggle-button { --bs-btn-active-color: var(--ai4cps-on-negative); }
+
+/* Navigation toggles sit on a dark surface, including primary DBC buttons. */
+.plant_dropdown .dropdown-toggle,
+.role_dropdown .dropdown-toggle,
+.user_dropdown .dropdown-toggle {
+    --bs-btn-color: var(--ai4cps-surface);
+    --bs-btn-bg: var(--ai4cps-text);
+    --bs-btn-hover-color: var(--ai4cps-surface);
+    --bs-btn-hover-bg: var(--ai4cps-hover);
+    --bs-btn-active-color: var(--ai4cps-surface);
+    --bs-btn-active-bg: var(--ai4cps-hover);
+    --bs-btn-disabled-color: var(--ai4cps-surface);
+    --bs-btn-disabled-bg: var(--ai4cps-text);
+    color: var(--ai4cps-surface);
+}
+
+.tooltip-content, .tooltip-content * { color: var(--ai4cps-tooltip-color, var(--ai4cps-surface)); text-align: left; }
+.tooltip-content { --bs-tooltip-bg: var(--ai4cps-tooltip-bg, var(--ai4cps-text)); --bs-tooltip-color: var(--ai4cps-tooltip-color, var(--ai4cps-surface)); --bs-tooltip-opacity: 1; --bs-tooltip-max-width: min(600px, 90vw); white-space: normal; overflow-wrap: anywhere; }
+.tooltip-negative { --ai4cps-tooltip-bg: color-mix(in srgb, var(--ai4cps-negative) 20%, var(--ai4cps-surface)); --ai4cps-tooltip-color: var(--ai4cps-text); }
+.tooltip-diagnosis { --ai4cps-tooltip-bg: color-mix(in srgb, var(--ai4cps-diagnosis) 20%, var(--ai4cps-surface)); --ai4cps-tooltip-color: var(--ai4cps-text); }
+.tooltip-content .text-on-dark { color: var(--ai4cps-tooltip-color, var(--ai4cps-surface)); }
+.tooltip-content .tooltip-inner { text-align: left; }
+.tooltip-content .small-inline-button { color: var(--bs-btn-color, var(--ai4cps-text)); }
+.tooltip-content .small-inline-button:hover { color: var(--bs-btn-hover-color, var(--ai4cps-surface)); }
+.tooltip-content .small-inline-button * { color: inherit; }
+.tooltip-label { cursor: help; text-decoration: underline dotted; text-underline-offset: 0.2em; }
+.tooltip-label:focus-visible { outline: 2px solid var(--ai4cps-info); outline-offset: 2px; }
+.tooltip-list { text-align: left; }
+/* Keep Popper's arrow outside the scroll area; it extends beyond the popup. */
+.tooltip-list .tooltip-inner { max-height: 50vh; overflow-y: auto; overflow-x: hidden; }
+.icon-negative { color: var(--ai4cps-negative); }
+.icon-error { color: var(--ai4cps-error); }
+.icon-positive { color: var(--ai4cps-positive); }
+.warning-blink { --fa-animation-duration: 1.5s; --fa-fade-opacity: 0; }
+.clipboard-buffer { position: fixed; left: -10000px; top: 0; }
+
+/* Shared panels, forms, diagrams and metadata. */
+.progress { --bs-progress-bg: var(--ai4cps-border); --bs-progress-bar-bg: var(--ai4cps-positive); --bs-progress-bar-color: var(--ai4cps-on-positive); }
+.accordion {
+    --bs-accordion-color: var(--ai4cps-text);
+    --bs-accordion-bg: var(--ai4cps-surface);
+    --bs-accordion-border-color: var(--ai4cps-border);
+    --bs-accordion-active-color: var(--ai4cps-text);
+    --bs-accordion-active-bg: var(--ai4cps-surface-subtle);
+    --bs-accordion-btn-color: var(--ai4cps-text);
+    --bs-accordion-btn-focus-box-shadow: none;
+}
+.form-control, .form-select { --bs-body-color: var(--ai4cps-text); --bs-body-bg: var(--ai4cps-surface); --bs-border-color: var(--ai4cps-border); }
+.form-control:focus, .form-select:focus { border-color: var(--ai4cps-positive); box-shadow: 0 0 0 0.125rem color-mix(in srgb, var(--ai4cps-positive) 25%, transparent); }
+.box-border { box-sizing: border-box; }
+.file-upload { width: 100%; min-height: 5rem; display: flex; align-items: center; justify-content: center; border: 1px dashed var(--ai4cps-border); border-radius: 0.5rem; text-align: center; margin-bottom: 1.25rem; }
+.file-upload:hover { border-color: var(--ai4cps-positive); background-color: var(--ai4cps-surface-subtle); }
+.field-dropdown { width: 100%; min-width: 0; }
+.dash-dropdown .Select-control { border-color: var(--ai4cps-border); background-color: var(--ai4cps-surface); color: var(--ai4cps-text); }
+.dash-dropdown .Select--multi .Select-value { border-color: var(--ai4cps-positive); background-color: var(--ai4cps-surface-subtle); color: var(--ai4cps-text); }
+.dash-dropdown .Select--multi .Select-value-icon { border-color: var(--ai4cps-positive); }
+.dash-dropdown .Select--multi .Select-value-icon:hover { background-color: var(--ai4cps-positive); color: var(--ai4cps-on-positive); }
+.dash-dropdown .Select-menu-outer { border-color: var(--ai4cps-border); background-color: var(--ai4cps-surface); }
+.dash-dropdown .VirtualizedSelectFocusedOption { background-color: var(--ai4cps-surface-subtle); color: var(--ai4cps-text); }
+.dash-dropdown .VirtualizedSelectSelectedOption { background-color: var(--ai4cps-positive); color: var(--ai4cps-on-positive); }
+.dash-dropdown.is-focused:not(.is-open) > .Select-control { border-color: var(--ai4cps-positive); box-shadow: none; }
+
+/* Compact, single-row selectors beside a label and optional actions. */
+.control-inline { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.control-inline > label { flex-shrink: 0; margin-bottom: 0; white-space: nowrap; }
+.control-inline > .dash-dropdown { flex: 0 1 32rem; width: 32rem; max-width: 100%; min-width: 0; }
+.control-inline.control-wide > .dash-dropdown { flex: 1 1 16rem; width: auto; }
+.control-inline:has(.Select.is-open) { position: relative; z-index: 45; }
+.control-compact { --ai4cps-control-height: 2rem; width: 100%; min-width: 0; font-size: 0.875rem; }
+.control-compact .Select-control {
+    box-sizing: border-box;
+    height: var(--ai4cps-control-height) !important;
+    min-height: var(--ai4cps-control-height);
+    border: 1px solid var(--ai4cps-border) !important;
+    border-radius: 0.375rem !important;
+    background-color: var(--ai4cps-surface);
+}
+.control-compact.is-focused > .Select-control { border-color: var(--ai4cps-positive) !important; }
+.control-compact .Select-input { height: calc(var(--ai4cps-control-height) - 2px); padding: 0 0.5rem; }
+.control-compact .Select-input > input { padding: 0; line-height: calc(var(--ai4cps-control-height) - 2px); }
+.control-compact .Select-placeholder { line-height: calc(var(--ai4cps-control-height) - 2px); }
+.control-compact.Select--single > .Select-control .Select-value {
+    height: calc(var(--ai4cps-control-height) - 2px);
+    line-height: calc(var(--ai4cps-control-height) - 2px);
+    justify-content: flex-start;
+    padding-left: 0.625rem;
+}
+.control-compact.Select--single .Select-value-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.control-compact.Select--multi .Select-control { display: flex; align-items: center; }
+.control-compact.Select--multi .Select-multi-value-wrapper {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    min-width: 0;
+    height: calc(var(--ai4cps-control-height) - 2px);
+    padding-left: 0.375rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: thin;
+}
+.control-compact.Select--multi .Select-value { display: inline-flex; flex: 0 0 auto; align-items: center; height: 1.375rem; margin: 0 0.25rem 0 0; }
+.control-compact.Select--multi .Select-input { flex: 0 0 auto; }
+.control-compact .Select-arrow-zone, .control-compact .Select-clear-zone { flex: 0 0 auto; }
+.control-compact .Select-arrow { border-top-color: var(--ai4cps-muted); }
+.control-compact.is-open > .Select-control .Select-arrow { border-top-color: transparent; border-bottom-color: var(--ai4cps-muted); }
+
+/* Expand selected values onto new rows, keeping the compact first-row height. */
+.control-wrap .Select-control { height: auto !important; }
+.control-wrap.Select--multi .Select-multi-value-wrapper {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: calc(var(--ai4cps-control-height) - 2px);
+    padding: 0.25rem 0.375rem;
+    row-gap: 0.25rem;
+    overflow: visible;
+    white-space: normal;
+}
+.control-wrap.Select--multi .Select-input { height: 1.375rem; }
+.control-wrap .Select-input > input { line-height: 1.375rem; }
+
+.schematic-row { width: 100%; display: flex; flex-wrap: wrap; gap: 10pt; align-items: stretch; }
+.schematic-panel { flex: 0 0 calc(50% - 5pt); min-width: 0; display: flex; flex-direction: column; }
+.schematic-stage { width: 100%; position: relative; margin: 0 auto; }
+.schematic-overlay { width: 100%; position: absolute; top: 0; left: 0; pointer-events: none; }
+.schematic-marker { position: absolute; z-index: 1; display: block; cursor: help; }
+button.schematic-marker { padding: 0; border: 0; background: transparent; cursor: pointer; }
+button.schematic-marker:focus-visible { outline: 2px solid var(--ai4cps-text); outline-offset: 2px; }
+.plot-navigation-target { scroll-margin-top: calc(var(--h-topbar, 0px) + var(--h-control, 0px) + 1rem); }
+.update-progress-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 1.25rem;
+    color: var(--ai4cps-muted);
+    font-size: 0.8125rem;
+    visibility: hidden;
+}
+.update-progress-scope:has(.update-progress-target[data-dash-is-loading="true"],
+                         .update-progress-target [data-dash-is-loading="true"],
+                         .pipeline-evaluation-pending) .update-progress-indicator {
+    visibility: visible;
+}
+.card-columns { width: 100%; margin: 0; column-gap: 10pt; row-gap: 0.75rem; }
+.type-numeric { background: color-mix(in srgb, var(--ai4cps-positive) 22%, var(--ai4cps-surface)); }
+.type-categorical { background: color-mix(in srgb, var(--ai4cps-info) 15%, var(--ai4cps-surface)); }
+.type-timestamp { background: color-mix(in srgb, var(--ai4cps-warning) 30%, var(--ai4cps-surface)); }
+.type-other { background: var(--ai4cps-surface-subtle); }
+.form-editor .field-comment { width: 100%; }
+.small-inline-button.copy-button { background: transparent; color: var(--ai4cps-muted); border: 0; }
+.small-inline-button.copy-button:hover { background: transparent; color: var(--ai4cps-text); }
+
+.progress-positive { --bs-progress-bar-bg: var(--ai4cps-positive); --bs-progress-bar-color: var(--ai4cps-on-positive); }
+.progress-negative { --bs-progress-bar-bg: var(--ai4cps-negative); --bs-progress-bar-color: var(--ai4cps-on-negative); }
+.progress-error { --bs-progress-bar-bg: var(--ai4cps-error); --bs-progress-bar-color: var(--ai4cps-on-error); }
+.progress-warning { --bs-progress-bar-bg: var(--ai4cps-warning); --bs-progress-bar-color: var(--ai4cps-on-warning); }
+.progress-success { --bs-progress-bar-bg: var(--ai4cps-positive); --bs-progress-bar-color: var(--ai4cps-on-positive); }
+.progress-danger { --bs-progress-bar-bg: var(--ai4cps-error); --bs-progress-bar-color: var(--ai4cps-on-error); }
+.progress-info { --bs-progress-bar-bg: var(--ai4cps-info); --bs-progress-bar-color: var(--ai4cps-on-info); }
+.progress-primary { --bs-progress-bar-bg: var(--ai4cps-primary); --bs-progress-bar-color: var(--ai4cps-on-primary); }
+.progress-secondary { --bs-progress-bar-bg: var(--ai4cps-secondary); --bs-progress-bar-color: var(--ai4cps-on-secondary); }
+
+.progress-diagnosis { --bs-progress-bar-bg: var(--ai4cps-diagnosis); --bs-progress-bar-color: var(--ai4cps-on-diagnosis); }
+
+.progress-reconfiguration { --bs-progress-bar-bg: var(--ai4cps-reconfiguration); --bs-progress-bar-color: var(--ai4cps-on-reconfiguration); }
+
+.progress-off { --bs-progress-bar-bg: var(--ai4cps-off); --bs-progress-bar-color: var(--ai4cps-on-off); }
+
+.progress-unchanged { --bs-progress-bar-bg: var(--ai4cps-unchanged); --bs-progress-bar-color: var(--ai4cps-on-unchanged); }

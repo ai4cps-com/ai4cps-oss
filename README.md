@@ -51,3 +51,6 @@ To be added.
 
 Install `ai4cps` and import from `ai4cps`, for example `from ai4cps.dash.dashboard import Dash4CPS`.
 The deprecated `selfx` distribution provides compatibility for legacy `selfx` imports.
+
+Dashboard applications use the [shared AI4CPS theme](docs/dashboard-theme.md) for
+control classes, semantic palette roles, and chart/diagram renderer styles.

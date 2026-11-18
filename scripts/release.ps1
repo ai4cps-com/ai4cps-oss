@@ -50,7 +50,7 @@ if ($status) {
     throw "Working tree is not clean. Commit or stash local changes before releasing."
 }
 
-$versionPath = Join-Path $repoRoot "selfx/version.py"
+$versionPath = Join-Path $repoRoot "ai4cps/version.py"
 $versionText = Get-Content -Path $versionPath -Raw -Encoding UTF8
 $versionPattern = '__version__\s*=\s*"(?<version>\d+\.\d+\.\d+)"'
 
@@ -116,7 +116,7 @@ $newVersionText = [regex]::Replace(
 $utf8NoBom = New-Object System.Text.UTF8Encoding $false
 [System.IO.File]::WriteAllText($versionPath, $newVersionText, $utf8NoBom)
 
-Invoke-Git add selfx/version.py
+Invoke-Git add ai4cps/version.py
 Invoke-Git commit -m "Bump version to $Version"
 Invoke-Git tag $tagName
 

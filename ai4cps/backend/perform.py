@@ -47,11 +47,8 @@ def run_tasks(tasks: Sequence[str], celery_app: Any, interv: Sequence[Any]) -> N
 
 
 def exist_requested_features(self, feature, system, start, finish):
-    features_to_get = self._feature_obj[system][feature].required_features
-    if features_to_get is None:
-        features_to_get = [feature]
-    else:
-        features_to_get.append(feature)
+    required = get_required_features(feature, self._feature_obj[system])
+    features_to_get = [f"{system}#{name}" for name in required]
 
     try:
         intervals = get_analysis_intervals(start, finish)
