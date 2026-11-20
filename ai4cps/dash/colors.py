@@ -11,8 +11,8 @@ color_list = plotly.colors.qualitative.Dark24
 
 # Semantic color groups used across charts and UI states.
 POSITIVE: list[str] = ["#04F1D9", "#B1C800", "#45AF97", "#2D00F5"]
-NEGATIVE: list[str] = ["#FC871C", "#FF312E", "#FDE74C"]
-NEUTRAL: list[str] = ["#191835", "#A08BFF", "#A3A3AE", "#693372", "#E8C990"]
+NEGATIVE: list[str] = ["#FFA94D", "#D32F2F", "#FDE74C"]
+NEUTRAL: list[str] = ["#191835", "#A08BFF", "#A3A3AE", "#693372", "#E8C990", "#E8E8ED"]
 OTHER: list[str] = ["#1F82C0", "#B2A198", "#512D38", "#CBFF4D", "#FFA3AF"]
 
 # Base colors.

@@ -10,7 +10,9 @@ import os
 import shutil
 import warnings
 from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from threading import Lock
 from traceback import print_exc
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple, Union
 
@@ -25,12 +27,15 @@ from dash.exceptions import PreventUpdate
 from flask import Response, redirect, request, send_file
 
 from ai4cps.backend.features import AnalysisManager, Feature, get_analysis_intervals
-from ai4cps.backend.perform import perform_requested_features, get_requested_features
-from ai4cps.backend.results import delete_files, get_result, is_stored
+from ai4cps.backend.perform import perform_requested_features, get_requested_features, get_required_features
+from ai4cps.backend.results import delete_files, get_result, is_stored, store_result
 from ai4cps.dash import colors
+from ai4cps.dash.components import loading_status
 from ai4cps.dash.routing_utils import (construct_id, parse_url, construct_url, deprecated_route_redirect, get_today,
                                        ROUTE_PREFIX)
 from ai4cps.dash.layouts import get_sidebar, get_topbar
+from ai4cps.dash.theme import css_variables
+from ai4cps.dash.plotting import register_template
 
 
 
@@ -43,7 +48,7 @@ external_stylesheets = [
     "https://fonts.googleapis.com/icon?family=Material+Icons",
     "https://fonts.googleapis.com/css2?family=Poppins&display=swap",
     dbc.icons.FONT_AWESOME,
-    "selfx_style.css",  # assumed to be served from assets/
+    f"{ROUTE_PREFIX.rstrip('/')}/_ai4cps/theme.css",
 ]
 
 
@@ -139,6 +144,9 @@ class Dash4CPS:
         self.unified: Dict[str, Any] = {}
         self.features: Dict[str, Any] = {}
         self._feature_obj: Dict[str, Dict[str, Any]] = {}
+        self._feature_jobs = {}
+        self._feature_job_lock = Lock()
+        self._feature_executor = None
 
         self.plant_names: List[str] = []
         self.data_access: Dict[str, Any] = {}
@@ -150,6 +158,7 @@ class Dash4CPS:
 
         # ---- Dash app ----
         override_stylesheets, override_routes = _stylesheet_overrides(css_overrides)
+        register_template(make_default=True)
         self.app = dash.Dash(
             __name__,
             external_stylesheets=external_stylesheets,
@@ -160,6 +169,10 @@ class Dash4CPS:
             title=TITLE,
             update_title=None,  # the tab keeps the title instead of showing "Updating..." while a page loads
             assets_folder=os.path.join(os.path.dirname(__file__), "assets"),
+        )
+        self.app.server.add_url_rule(
+            f"{ROUTE_PREFIX.rstrip('/')}/_ai4cps/theme.css", "ai4cps_theme",
+            lambda: Response(css_variables(), mimetype="text/css"),
         )
         for route, endpoint, view_func in override_routes:
             self.app.server.add_url_rule(route, endpoint=endpoint, view_func=view_func)
@@ -278,15 +291,17 @@ class Dash4CPS:
 
         @self.app.server.before_request
         def redirect_dashboard_root():
-            if request.path.rstrip("/") == ROUTE_PREFIX.rstrip("/"):
+            if request.path.rstrip("/") in ("", ROUTE_PREFIX.rstrip("/")):
                 system = self.plant_names[0]
                 user = self.users[0]
                 if user == "Background" or user not in self.features[system]:
                     user = next(role for role, features in self.features[system].items()
                                 if role != "Background" and features)
                 feature = next(iter(self.features[system][user].keys()))
-                return redirect(construct_url(system=system, user=user, feature=feature, start=get_today(),
-                                              end=get_today()), code=302)
+                day = (get_today() if self.initial_date is None
+                       else pd.Timestamp(self.initial_date).date().isoformat())
+                return redirect(construct_url(system=system, user=user, feature=feature, start=day,
+                                              end=day), code=302)
 
         self._cleanup_online_folder()
         self._ensure_default_users_roles()
@@ -326,6 +341,11 @@ class Dash4CPS:
                 raise PreventUpdate
 
             if reevaluate_clicks:
+                job = self._feature_jobs.get((system, feature, start_date, end_date))
+                if job is not None and not job.done():
+                    # Keep polling the existing request instead of deleting its
+                    # results and queueing the same expensive analysis again.
+                    return construct_url(system, role, feature, start_date, end_date)
                 logger.info("Reevaluate triggered -> deleting cached files.")
                 intervals = get_analysis_intervals(start_date, end_date)
                 delete_files(intervals)
@@ -387,8 +407,39 @@ class Dash4CPS:
             if feature_object is None:
                 return topbar_layout, sidebar_layout, error_content(f"Unknown feature: {feature}", href)
 
-            perform_requested_features(self._feature_obj[system], self.celery_app, feature, system, start, end)
+            self._request_features(feature, system, start, end)
             return topbar_layout, sidebar_layout, self._content_container()
+
+    def _request_features(self, feature, system, start, end):
+        obj = self._feature_obj[system][feature]
+        if not (getattr(obj, "background_execution", False) and self.celery_app.conf.task_always_eager):
+            perform_requested_features(self._feature_obj[system], self.celery_app, feature, system, start, end)
+            return None
+        key = (system, feature, start, end)
+        with self._feature_job_lock:
+            job = self._feature_jobs.get(key)
+            if job is not None and not job.done():
+                return job
+            if self._feature_executor is None:
+                self._feature_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="ai4cps-features")
+            job = self._feature_executor.submit(self._run_background_features, feature, system, start, end)
+            self._feature_jobs[key] = job
+            return job
+
+    def _run_background_features(self, feature, system, start, end):
+        try:
+            perform_requested_features(self._feature_obj[system], self.celery_app, feature, system, start, end)
+        except Exception:
+            logger.exception("Background feature request failed: %s/%s", system, feature)
+        finally:
+            # Eager execution has finished here. Mark any missing output as a
+            # failure so the normal result poller stops waiting indefinitely.
+            required = get_required_features(feature, self._feature_obj[system])
+            for interval, (interval_start, _) in get_analysis_intervals(start, end).items():
+                for name in required:
+                    qualified = f"{system}#{name}"
+                    if not is_stored(interval, qualified):
+                        store_result(interval_start, qualified, None)
 
     def _register_content_content(self):
         @self.app.callback(Output(construct_id("contentcontent"), "children"),
@@ -412,20 +463,16 @@ class Dash4CPS:
                 exist_features = self.exist_requested_features(feature, system, start, end)
                 if not max_intervals or max_intervals <= 0 or n_intervals < max_intervals:
                     if exist_features.all().all():
-                        return html.Div(children=[html.Br(),
-                                                  "Analysis finished.",
-                                                  html.Br()]), False, n_intervals + 1
+                        return loading_status('Analysis finished. Visualizing results…'), False, n_intervals + 1
                     else:
                         print("**** Features not ready")
 
                         features_status = feature_progress_table(exist_features)
                         return html.Div(
                             [
-                                dcc.Loading(),
-                                html.Div(
+                                loading_status(
                                     f"Waiting for the analysis: "
                                     f"{n_intervals * self.content_not_ready_refresh_interval}s",
-                                    className="feature_progress_status",
                                 ),
                                 features_status,
                             ],
@@ -454,9 +501,7 @@ class Dash4CPS:
                                 print_exc()
                                 return error_content(f"Problem executing feature: {feature}", pathname), True, -1
                         else:
-                            return html.Div(children=[html.Br(),
-                                                      f"{self.translate[system]('Analysis finished.')}",
-                                                      html.Br()]), False, n_intervals + 1
+                            return loading_status('Analysis finished. Visualizing results…'), False, n_intervals + 1
                     except TypeError as te:
                         print(f'TypeError')
                         print_exc()
@@ -484,12 +529,13 @@ class Dash4CPS:
 
                     modal = dbc.Modal([
                         dbc.ModalHeader("Configure"),
-                        dbc.ModalBody(par_form + [dbc.ModalFooter(
+                        dbc.ModalBody(par_form), dbc.ModalFooter(
                             [dbc.Button("Cancel", id=construct_id(name, feature, "close"),
-                                        className="configure-close"),
+                                        color="cancel", className="small-inline-button"),
                              dbc.Button("Apply", id=construct_id(name, feature, "configure-apply"),
-                                        className="configure-apply")])])],
-                        id=construct_id(name, feature, "modal"), className='modal-content', is_open=False)
+                                        color="primary", className="small-inline-button")])],
+                        id=construct_id(name, feature, "modal"), className='form-editor form-editor-wide',
+                        size='xl', centered=True, scrollable=True, is_open=False)
                     configure_buttons = [
                         html.Button(className="configure_button",
                                     id=construct_id(name, feature, "configure"),
@@ -520,7 +566,7 @@ class Dash4CPS:
                             [dbc.Textarea(id='llm-result', disabled=True, value=llm_text, style={'height': '400px'})] +
                             [dbc.ModalFooter(
                                 [dbc.Button("Close", id=construct_id(name, feature, "close-llm"),
-                                            className="configure-close")])])],
+                                            color="secondary", className="small-inline-button")])])],
                         id=construct_id(name, feature, "modal-llm"), className='modal-content', is_open=False)
                     llm_buttons = [
                         html.Button(className="llm_button",
@@ -544,8 +590,8 @@ class Dash4CPS:
             return content, True, -1
 
     def exist_requested_features(self, feature, system, start, finish):
-        dependencies = self._feature_obj[system][feature].required_features or ()
-        features_to_get = [f"{system}#{name}" for name in dict.fromkeys([*dependencies, feature])]
+        required = get_required_features(feature, self._feature_obj[system])
+        features_to_get = [f"{system}#{name}" for name in required]
 
         try:
             intervals = get_analysis_intervals(start, finish)
@@ -901,7 +947,8 @@ def get_modal(modal_id: str, title: str = "Notification", button: bool = True, b
     """Small modal helper with optional acknowledge button."""
     buttons = []
     if button:
-        buttons.append(dbc.Button(button_text, id=construct_id(modal_id, "button"), className="configure-apply"))
+        buttons.append(dbc.Button(button_text, id=construct_id(modal_id, "button"),
+                                  color="primary", className="small-inline-button"))
 
     return dbc.Modal(
         [
